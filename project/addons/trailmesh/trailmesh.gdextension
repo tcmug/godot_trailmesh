@@ -1,0 +1,20 @@
+[configuration]
+
+entry_symbol = "trailmesh_library_init"
+compatibility_minimum = 4.1
+
+[icons]
+TrailEmitter = "res://addons/trailmesh/icons/TrailEmitter.svg"
+
+[libraries]
+
+macos.debug = "bin/libtrailmesh.macos.debug.framework"
+macos.release = "bin/libtrailmesh.macos.release.framework"
+windows.debug.x86_64 = "bin/libtrailmesh.windows.debug.x86_64.dll"
+windows.release.x86_64 = "bin/libtrailmesh.windows.release.x86_64.dll"
+linux.debug.x86_64 = "bin/libtrailmesh.linux.debug.x86_64.so"
+linux.release.x86_64 = "bin/libtrailmesh.linux.release.x86_64.so"
+linux.debug.arm64 = "bin/libtrailmesh.linux.debug.arm64.so"
+linux.release.arm64 = "bin/libtrailmesh.linux.release.arm64.so"
+linux.debug.rv64 = "bin/libtrailmesh.linux.debug.rv64.so"
+linux.release.rv64 = "bin/libtrailmesh.linux.release.rv64.so"

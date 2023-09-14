@@ -1,0 +1,9 @@
+.scons-cache/
+*.os
+*.import
+.sconf_temp
+.sconsign.dblite
+*.pyc
+*.framework
+.DS_Store
+.vscode/
