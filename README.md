@@ -9,6 +9,8 @@ Caveats:
   - Visibility is a bit buggy
   - Editor missing UI hints
 
-![trails](https://github.com/tcmug/godot_trailmesh/assets/567207/25cadf5d-d880-481d-be84-c553869ed996)
+| ![trails](https://github.com/tcmug/godot_trailmesh/assets/567207/25cadf5d-d880-481d-be84-c553869ed996) | ![trails2](https://github.com/tcmug/godot_trailmesh/assets/567207/3f8cb376-6ef4-4b0c-8dc8-f42c09f5e3e0) |
+|-|-|
+
 
 Setup implementation from: <https://github.com/nathanfranke/gdextension>
