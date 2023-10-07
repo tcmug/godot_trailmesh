@@ -112,6 +112,19 @@ void TrailMesh::_ready() {
   }
 }
 
+// vv ChatGPT vv 
+// "pick the lower value out of an input of two float values using branchless programming"
+float min_float(float a, float b) {
+  int mask = (a < b) - 1;  // If a < b, mask = -1 (all 1s); otherwise, mask = 0
+  return (a & mask) | (b & ~mask);  // If a < b, result = a; otherwise, result = b
+}
+
+float max_float(float a, float b) {
+  int mask = (a > b) - 1;  // If a > b, mask = -1 (all 1s); otherwise, mask = 0
+  return (a & ~mask) | (b & mask);  // If a > b, result = a; otherwise, result = b
+}
+// ^^ ChatGPT ^^
+
 void TrailMesh::_process(double delta) {
   Transform3D previous_emitter_transform = emitter_transform;
   update_transform();
@@ -168,6 +181,10 @@ void TrailMesh::_process(double delta) {
 
     int vi = 0, ci = 0, ni = 0, uvi = 0, ti = 0;
 
+    // These are for visibility AABB:
+    Vector3 min_pos = Vector3(10000, 10000, 10000);
+    Vector3 max_pos = Vector3(-10000, -10000, -10000);
+
     for (int i = 0; i < num_points; i++) {
       Vector3 normal = trail_points[i].center.direction_to(camera_position);
       Vector3 orientation = normal.cross(trail_points[i].direction_vector);
@@ -179,9 +196,18 @@ void TrailMesh::_process(double delta) {
       }
 
       Vector3 edge_vector = orientation * sz;
+      Vector3& position = trail_points[i].center;
 
-      vertex_buffer[vi++] = trail_points[i].center + edge_vector;
-      vertex_buffer[vi++] = trail_points[i].center - edge_vector;
+      // Keep track of min and max points.
+      min_pos.x = min_float(position.x, min_pos.x);
+      min_pos.y = min_float(position.y, min_pos.y);
+      min_pos.z = min_float(position.z, min_pos.z);
+      max_pos.x = min_float(position.x, max_pos.x);
+      max_pos.y = min_float(position.y, max_pos.y);
+      max_pos.z = min_float(position.z, max_pos.z);
+
+      vertex_buffer[vi++] = position + edge_vector;
+      vertex_buffer[vi++] = position - edge_vector;
 
       normal_buffer[ni++] = normal;
       normal_buffer[ni++] = normal;
@@ -208,7 +234,7 @@ void TrailMesh::_process(double delta) {
       }
     }
 
-    set_custom_aabb(AABB(current_position + Vector3(Vector3(-50, -50, -50)), Vector3(100, 100, 100)));
+    set_custom_aabb(AABB(min_pos, max_pos - min_pos));
 
     Ref<ArrayMesh> mesh = get_mesh();
     if (mesh.is_valid()) {
