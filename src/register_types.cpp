@@ -11,31 +11,36 @@
 using namespace godot;
 
 void initialize_trailmesh_module(ModuleInitializationLevel p_level) {
-  if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-    return;
-  }
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
 
-  ClassDB::register_class<TrailEmitter>();
-  ClassDB::register_class<TrailMesh>(true);
+	ClassDB::register_class<TrailEmitter>();
+	ClassDB::register_class<TrailMesh>(true);
 
 }
 
 void uninitialize_trailmesh_module(ModuleInitializationLevel p_level) {
-  if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-    return;
-  }
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
 }
 
 extern "C"
 {
-  // Initialization.
-  GDExtensionBool GDE_EXPORT trailmesh_library_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization* r_initialization) {
-    godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
+	// Initialization.
+	GDExtensionBool GDE_EXPORT trailmesh_library_init(
+			GDExtensionInterfaceGetProcAddress p_get_proc_address,
+			const GDExtensionClassLibraryPtr p_library,
+			GDExtensionInitialization* r_initialization
+		) {
 
-    init_obj.register_initializer(initialize_trailmesh_module);
-    init_obj.register_terminator(uninitialize_trailmesh_module);
-    init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
+		godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
-    return init_obj.init();
-  }
+		init_obj.register_initializer(initialize_trailmesh_module);
+		init_obj.register_terminator(uninitialize_trailmesh_module);
+		init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
+
+		return init_obj.init();
+	}
 }

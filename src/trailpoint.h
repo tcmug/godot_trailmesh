@@ -6,11 +6,10 @@
 using namespace godot;
 
 class TrailPoint {
-public:
-  Vector3 center;
-  Vector3 direction_vector;
-  float size;
-
+	public:
+	  Vector3 center;
+	  Vector3 direction_vector;
+	  float size;
 };
 
 #endif
