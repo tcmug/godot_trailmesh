@@ -8,6 +8,9 @@
 #include <godot_cpp/classes/array_mesh.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
+#define min(a,b) (a < b ? a : b)
+#define max(a,b) (a > b ? a : b)
+
 using namespace godot;
 
 void TrailMesh::_bind_methods() {
@@ -112,19 +115,6 @@ void TrailMesh::_ready() {
   }
 }
 
-// vv ChatGPT vv 
-// "pick the lower value out of an input of two float values using branchless programming"
-float min_float(float a, float b) {
-  int mask = (a < b) - 1;  // If a < b, mask = -1 (all 1s); otherwise, mask = 0
-  return (a & mask) | (b & ~mask);  // If a < b, result = a; otherwise, result = b
-}
-
-float max_float(float a, float b) {
-  int mask = (a > b) - 1;  // If a > b, mask = -1 (all 1s); otherwise, mask = 0
-  return (a & ~mask) | (b & mask);  // If a > b, result = a; otherwise, result = b
-}
-// ^^ ChatGPT ^^
-
 void TrailMesh::_process(double delta) {
   Transform3D previous_emitter_transform = emitter_transform;
   update_transform();
@@ -199,12 +189,12 @@ void TrailMesh::_process(double delta) {
       Vector3& position = trail_points[i].center;
 
       // Keep track of min and max points.
-      min_pos.x = min_float(position.x, min_pos.x);
-      min_pos.y = min_float(position.y, min_pos.y);
-      min_pos.z = min_float(position.z, min_pos.z);
-      max_pos.x = min_float(position.x, max_pos.x);
-      max_pos.y = min_float(position.y, max_pos.y);
-      max_pos.z = min_float(position.z, max_pos.z);
+      min_pos.x = min(position.x, min_pos.x);
+      min_pos.y = min(position.y, min_pos.y);
+      min_pos.z = min(position.z, min_pos.z);
+      max_pos.x = max(position.x, max_pos.x);
+      max_pos.y = max(position.y, max_pos.y);
+      max_pos.z = max(position.z, max_pos.z);
 
       vertex_buffer[vi++] = position + edge_vector;
       vertex_buffer[vi++] = position - edge_vector;

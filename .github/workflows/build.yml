@@ -131,3 +131,5 @@ jobs:
           name: ${{ github.event.repository.name }}
           path: |
             ${{ github.workspace }}/project/
+            !${{ github.workspace }}/project/.gitignore
+
