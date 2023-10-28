@@ -156,7 +156,7 @@ void TrailMesh::_process(double delta) {
 	Camera3D* camera = get_viewport()->get_camera_3d();
 	if (camera) {
 		// Transform points to the vertex buffer.
-		const Vector3 camera_position = camera->get_position();
+		const Vector3 camera_position = to_local(camera->get_global_position());
 
 		Gradient* p_gradient = NULL;
 		Curve* p_curve = NULL;
