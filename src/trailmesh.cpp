@@ -109,7 +109,7 @@ void TrailMesh::_ready() {
 
 	// Initialize points.
 	for (int i = 0; i < num_points; i++) {
-		trail_points[i].center = emitter_transform.origin;
+		trail_points[i].center = to_local(emitter_transform.origin);
 		trail_points[i].direction_vector.zero();
 		trail_points[i].size = 0;
 	}
