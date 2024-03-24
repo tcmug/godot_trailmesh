@@ -1,15 +1,15 @@
 #include "trailmesh.h"
 // #include <godot_cpp/core/class_db.hpp>
 
+#include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/camera3d.hpp>
 #include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/shader_material.hpp>
 #include <godot_cpp/classes/viewport.hpp>
-#include <godot_cpp/classes/camera3d.hpp>
-#include <godot_cpp/classes/array_mesh.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-#define min(a,b) (a < b ? a : b)
-#define max(a,b) (a > b ? a : b)
+#define min(a, b) (a < b ? a : b)
+#define max(a, b) (a > b ? a : b)
 
 using namespace godot;
 
@@ -80,7 +80,7 @@ void TrailMesh::update_transform() {
 }
 
 Vector3 TrailMesh::get_cam_vector() const {
-	Camera3D* camera = get_viewport()->get_camera_3d();
+	Camera3D *camera = get_viewport()->get_camera_3d();
 	if (camera) {
 		return camera->get_global_transform().basis.get_column(2).normalized();
 	}
@@ -104,7 +104,7 @@ void TrailMesh::_ready() {
 	if (curve.is_valid())
 		geometry[ArrayMesh::ARRAY_COLOR] = color_buffer;
 
-	ArrayMesh* mesh = memnew(ArrayMesh);
+	ArrayMesh *mesh = memnew(ArrayMesh);
 	set_mesh(Ref(mesh));
 
 	// Initialize points.
@@ -153,13 +153,13 @@ void TrailMesh::_process(double delta) {
 
 	Vector3 cam_vector = get_cam_vector();
 
-	Camera3D* camera = get_viewport()->get_camera_3d();
+	Camera3D *camera = get_viewport()->get_camera_3d();
 	if (camera) {
 		// Transform points to the vertex buffer.
 		const Vector3 camera_position = to_local(camera->get_global_position());
 
-		Gradient* p_gradient = NULL;
-		Curve* p_curve = NULL;
+		Gradient *p_gradient = NULL;
+		Curve *p_curve = NULL;
 
 		if (gradient.is_valid()) {
 			p_gradient = gradient.ptr();
@@ -186,7 +186,7 @@ void TrailMesh::_process(double delta) {
 			}
 
 			Vector3 edge_vector = orientation * sz;
-			Vector3& position = trail_points[i].center;
+			Vector3 &position = trail_points[i].center;
 
 			// Keep track of min and max points.
 			min_pos.x = min(position.x, min_pos.x);
@@ -195,7 +195,6 @@ void TrailMesh::_process(double delta) {
 			max_pos.x = max(position.x, max_pos.x);
 			max_pos.y = max(position.y, max_pos.y);
 			max_pos.z = max(position.z, max_pos.z);
-
 
 			vertex_buffer[vi++] = position + edge_vector;
 			vertex_buffer[vi++] = position - edge_vector;
@@ -229,7 +228,7 @@ void TrailMesh::_process(double delta) {
 
 		Ref<ArrayMesh> mesh = get_mesh();
 		if (mesh.is_valid()) {
-			ArrayMesh* array_mesh = mesh.ptr();
+			ArrayMesh *array_mesh = mesh.ptr();
 			array_mesh->clear_surfaces();
 			geometry[ArrayMesh::ARRAY_VERTEX] = vertex_buffer;
 			geometry[ArrayMesh::ARRAY_NORMAL] = normal_buffer;
@@ -243,7 +242,7 @@ void TrailMesh::_process(double delta) {
 
 		Ref<ShaderMaterial> mat = get_material_override();
 		if (mat.is_valid()) {
-			ShaderMaterial* material = mat.ptr();
+			ShaderMaterial *material = mat.ptr();
 			material->set_shader_parameter("MAX_VERTICES", float(num_vertices));
 			material->set_shader_parameter("SPAWN_INTERVAL_SECONDS", float(update_interval));
 		}

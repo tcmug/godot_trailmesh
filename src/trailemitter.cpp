@@ -4,7 +4,6 @@
 #include <godot_cpp/classes/array_mesh.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-
 using namespace godot;
 
 void TrailEmitter::_bind_methods() {
@@ -57,14 +56,12 @@ double TrailEmitter::get_update_interval() const {
 	return update_interval;
 }
 
-
 void TrailEmitter::set_update_interval(double value) {
 	update_interval = value;
 	if (trail_mesh) {
 		trail_mesh->update_interval = update_interval;
 	}
 }
-
 
 void TrailEmitter::set_geometry_root(NodePath nodepath) {
 	geometry_root = nodepath;
@@ -97,7 +94,6 @@ void TrailEmitter::set_gradient(Ref<Gradient> new_gradient) {
 Ref<Gradient> TrailEmitter::get_gradient() const {
 	return gradient;
 }
-
 
 void TrailEmitter::set_num_points(int value) {
 	num_points = value;
@@ -143,9 +139,8 @@ double TrailEmitter::get_uv_shift() const {
 	return uv_shift;
 }
 
-
 void TrailEmitter::_ready() {
-	Node* geometry_root_node = get_node_or_null(geometry_root);
+	Node *geometry_root_node = get_node_or_null(geometry_root);
 	if (!geometry_root_node) {
 		geometry_root_node = this;
 	}
@@ -159,12 +154,11 @@ void TrailEmitter::_ready() {
 	trail_mesh->set_material_override(material);
 	if (curve.is_valid()) {
 		curve.ptr()->bake();
-	trail_mesh->set_curve(curve);
+		trail_mesh->set_curve(curve);
 	}
 	if (gradient.is_valid()) {
 		trail_mesh->set_gradient(gradient);
 	}
 	trail_mesh->set_as_top_level(true);
 	geometry_root_node->call_deferred("add_child", trail_mesh);
-
 }
