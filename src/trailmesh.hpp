@@ -41,7 +41,6 @@ private:
 	Ref<Curve> curve;
 	Ref<Gradient> gradient;
 
-	Vector3 get_cam_vector() const;
 	void update_transform();
 
 protected:

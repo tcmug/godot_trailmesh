@@ -79,14 +79,6 @@ void TrailMesh::update_transform() {
 	}
 }
 
-Vector3 TrailMesh::get_cam_vector() const {
-	Camera3D *camera = get_viewport()->get_camera_3d();
-	if (camera) {
-		return camera->get_global_transform().basis.get_column(2).normalized();
-	}
-	return Vector3(0, 1, 0);
-}
-
 void TrailMesh::_ready() {
 	initialize_arrays();
 	elapsed = 0.0;
@@ -150,10 +142,8 @@ void TrailMesh::_process(double delta) {
 	trail_points[0].center = current_position;
 	trail_points[0].direction_vector = direction_vector;
 	trail_points[0].size = spawn_size;
-
-	Vector3 cam_vector = get_cam_vector();
-
 	Camera3D *camera = get_viewport()->get_camera_3d();
+
 	if (camera) {
 		// Transform points to the vertex buffer.
 		const Vector3 camera_position = to_local(camera->get_global_position());
