@@ -1,5 +1,5 @@
-#include "trailemitter.h"
-#include "trailmesh.h"
+#include "trailemitter.hpp"
+#include "trailmesh.hpp"
 
 #include <godot_cpp/classes/array_mesh.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>

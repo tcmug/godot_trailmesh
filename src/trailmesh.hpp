@@ -1,12 +1,12 @@
-#ifndef TRAILMESH__H
-#define TRAILMESH__H
+#ifndef TRAILMESH_H
+#define TRAILMESH_H
 
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/variant/packed_color_array.hpp>
 #include <godot_cpp/variant/packed_vector3_array.hpp>
 
-#include <trailemitter.h>
-#include <trailpoint.h>
+#include <trailemitter.hpp>
+#include <trailpoint.hpp>
 
 namespace godot {
 

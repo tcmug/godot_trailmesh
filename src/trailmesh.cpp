@@ -1,4 +1,4 @@
-#include "trailmesh.h"
+#include "trailmesh.hpp"
 // #include <godot_cpp/core/class_db.hpp>
 
 #include <godot_cpp/classes/array_mesh.hpp>

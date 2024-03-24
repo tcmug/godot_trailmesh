@@ -1,5 +1,5 @@
-#include "trailemitter.h"
-#include "trailmesh.h"
+#include "trailemitter.hpp"
+#include "trailmesh.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/class_db.hpp>
