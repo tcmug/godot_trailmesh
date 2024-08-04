@@ -26,4 +26,4 @@ Caveats:
 
 ![basic-example](./docs/assets/basic-example.gif)
 
-Setup implementation from: <https://github.com/nathanfranke/gdextension>
+Setup implementation from: <https://github.com/godotengine/godot-cpp-template>

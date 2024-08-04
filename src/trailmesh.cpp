@@ -27,12 +27,18 @@ TrailMesh::TrailMesh() {
 	fade_away_timer = 0.0;
 	num_points = 200;
 	size = 1.0;
-	trail_emitter = NULL;
-	trail_points = NULL;
+	uv_shift = 0.0;
+	noise_scale = 0.0;
+	elapsed = 0.0;
+	total_elapsed = 0.0;
+	update_interval = 0.1;
+	trail_emitter = nullptr;
+	trail_points = nullptr;
 }
 
 void TrailMesh::set_num_points(int value) {
 	num_points = value;
+	initialize_arrays();
 }
 
 void TrailMesh::initialize_arrays() {
@@ -41,9 +47,17 @@ void TrailMesh::initialize_arrays() {
 	tangent_buffer.resize(num_points * 2 * 4);
 	uv_buffer.resize(num_points * 2);
 	color_buffer.resize(num_points * 2);
-	if (trail_points)
+	if (trail_points) {
 		delete[] trail_points;
+	}
 	trail_points = new TrailPoint[num_points];
+}
+
+void TrailMesh::offset_mesh_points(Vector3 offset) {
+	emitter_transform.origin += offset;
+	for (int i = 0; i < num_points; i++) {
+		trail_points[i].center += offset;
+	}
 }
 
 int TrailMesh::get_num_points() const {
@@ -68,7 +82,7 @@ Ref<Gradient> TrailMesh::get_gradient() const {
 
 TrailMesh::~TrailMesh() {
 	if (trail_emitter) {
-		trail_emitter->trail_mesh = NULL;
+		trail_emitter->trail_mesh = nullptr;
 	}
 	delete[] trail_points;
 }
@@ -81,9 +95,6 @@ void TrailMesh::update_transform() {
 
 void TrailMesh::_ready() {
 	initialize_arrays();
-	elapsed = 0.0;
-	total_elapsed = 0.0;
-	update_interval = 0.1;
 	update_transform();
 
 	vertex_buffer.fill(emitter_transform.origin);
@@ -93,9 +104,9 @@ void TrailMesh::_ready() {
 	geometry[ArrayMesh::ARRAY_NORMAL] = normal_buffer;
 	geometry[ArrayMesh::ARRAY_TANGENT] = tangent_buffer;
 	geometry[ArrayMesh::ARRAY_TEX_UV] = uv_buffer;
-	if (curve.is_valid())
+	if (gradient.is_valid()) {
 		geometry[ArrayMesh::ARRAY_COLOR] = color_buffer;
-
+	}
 	ArrayMesh *mesh = memnew(ArrayMesh);
 	set_mesh(Ref(mesh));
 
@@ -138,7 +149,10 @@ void TrailMesh::_process(double delta) {
 	float update_fraction = elapsed / update_interval;
 
 	// Update active point.
-	float spawn_size = size * UtilityFunctions::randf_range(1.0 - noise_scale, 1.0 + noise_scale);
+	float spawn_size = size;
+	if (noise_scale != 0.0) {
+		noise_scale *= UtilityFunctions::randf_range(1.0 - noise_scale, 1.0 + noise_scale);
+	}
 	trail_points[0].center = current_position;
 	trail_points[0].direction_vector = direction_vector;
 	trail_points[0].size = spawn_size;
@@ -148,8 +162,8 @@ void TrailMesh::_process(double delta) {
 		// Transform points to the vertex buffer.
 		const Vector3 camera_position = to_local(camera->get_global_position());
 
-		Gradient *p_gradient = NULL;
-		Curve *p_curve = NULL;
+		Gradient *p_gradient = nullptr;
+		Curve *p_curve = nullptr;
 
 		if (gradient.is_valid()) {
 			p_gradient = gradient.ptr();
@@ -167,7 +181,8 @@ void TrailMesh::_process(double delta) {
 
 		for (int i = 0; i < num_points; i++) {
 			Vector3 normal = trail_points[i].center.direction_to(camera_position);
-			Vector3 orientation = normal.cross(trail_points[i].direction_vector);
+			// Normalize for keeping sizes consistent.
+			Vector3 orientation = normal.cross(trail_points[i].direction_vector).normalized();
 			Vector3 tangent = trail_points[i].direction_vector;
 			double sz = trail_points[i].size;
 
