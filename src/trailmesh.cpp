@@ -104,7 +104,7 @@ void TrailMesh::_ready() {
 	geometry[ArrayMesh::ARRAY_NORMAL] = normal_buffer;
 	geometry[ArrayMesh::ARRAY_TANGENT] = tangent_buffer;
 	geometry[ArrayMesh::ARRAY_TEX_UV] = uv_buffer;
-	if (curve.is_valid()) {
+	if (gradient.is_valid()) {
 		geometry[ArrayMesh::ARRAY_COLOR] = color_buffer;
 	}
 	ArrayMesh *mesh = memnew(ArrayMesh);
@@ -149,7 +149,10 @@ void TrailMesh::_process(double delta) {
 	float update_fraction = elapsed / update_interval;
 
 	// Update active point.
-	float spawn_size = size * UtilityFunctions::randf_range(1.0 - noise_scale, 1.0 + noise_scale);
+	float spawn_size = size;
+	if (noise_scale != 0.0) {
+		noise_scale *= UtilityFunctions::randf_range(1.0 - noise_scale, 1.0 + noise_scale);
+	}
 	trail_points[0].center = current_position;
 	trail_points[0].direction_vector = direction_vector;
 	trail_points[0].size = spawn_size;
@@ -178,7 +181,8 @@ void TrailMesh::_process(double delta) {
 
 		for (int i = 0; i < num_points; i++) {
 			Vector3 normal = trail_points[i].center.direction_to(camera_position);
-			Vector3 orientation = normal.cross(trail_points[i].direction_vector);
+			// Normalize for keeping sizes consistent.
+			Vector3 orientation = normal.cross(trail_points[i].direction_vector).normalized();
 			Vector3 tangent = trail_points[i].direction_vector;
 			double sz = trail_points[i].size;
 

@@ -153,13 +153,16 @@ void TrailEmitter::_ready() {
 	trail_mesh->noise_scale = noise_scale;
 	trail_mesh->uv_shift = uv_shift;
 	trail_mesh->set_material_override(material);
+
 	if (curve.is_valid()) {
 		curve.ptr()->bake();
 		trail_mesh->set_curve(curve);
 	}
+
 	if (gradient.is_valid()) {
 		trail_mesh->set_gradient(gradient);
 	}
+
 	trail_mesh->set_as_top_level(true);
 	geometry_root_node->call_deferred("add_child", trail_mesh);
 }
