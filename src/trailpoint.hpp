@@ -9,7 +9,7 @@ class TrailPoint {
 public:
 	Vector3 center;
 	Vector3 direction_vector;
-	float size;
+	float size = 0.0;
 };
 
 #endif

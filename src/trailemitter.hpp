@@ -64,6 +64,8 @@ public:
 
 	double get_update_interval() const;
 	void set_update_interval(double value);
+
+	void offset_mesh_points(Vector3 offset);
 };
 } //namespace godot
 

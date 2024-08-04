@@ -25,6 +25,7 @@ void TrailEmitter::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_uv_shift"), &TrailEmitter::get_uv_shift);
 	ClassDB::bind_method(D_METHOD("set_update_interval", "value"), &TrailEmitter::set_update_interval);
 	ClassDB::bind_method(D_METHOD("get_update_interval"), &TrailEmitter::get_update_interval);
+	ClassDB::bind_method(D_METHOD("offset_mesh_points", "amount"), &TrailEmitter::offset_mesh_points);
 
 	ClassDB::add_property("TrailEmitter", PropertyInfo(Variant::OBJECT, "material", PROPERTY_HINT_RESOURCE_TYPE, "Material"), "set_material", "get_material");
 	ClassDB::add_property("TrailEmitter", PropertyInfo(Variant::OBJECT, "curve", PROPERTY_HINT_RESOURCE_TYPE, "Curve"), "set_curve", "get_curve");
@@ -43,12 +44,12 @@ TrailEmitter::TrailEmitter() {
 	uv_shift = 0.0;
 	noise_scale = 0.0;
 	update_interval = 0.1;
-	trail_mesh = NULL;
+	trail_mesh = nullptr;
 }
 
 TrailEmitter::~TrailEmitter() {
 	if (trail_mesh) {
-		trail_mesh->trail_emitter = NULL;
+		trail_mesh->trail_emitter = nullptr;
 	}
 }
 
@@ -161,4 +162,8 @@ void TrailEmitter::_ready() {
 	}
 	trail_mesh->set_as_top_level(true);
 	geometry_root_node->call_deferred("add_child", trail_mesh);
+}
+
+void TrailEmitter::offset_mesh_points(Vector3 offset) {
+	trail_mesh->offset_mesh_points(offset);
 }
