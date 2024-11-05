@@ -155,7 +155,7 @@ void TrailEmitter::_ready() {
 	trail_mesh->set_material_override(material);
 
 	if (curve.is_valid()) {
-		curve.ptr()->bake();
+		curve->bake();
 		trail_mesh->set_curve(curve);
 	}
 

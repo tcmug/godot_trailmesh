@@ -162,17 +162,6 @@ void TrailMesh::_process(double delta) {
 		// Transform points to the vertex buffer.
 		const Vector3 camera_position = to_local(camera->get_global_position());
 
-		Gradient *p_gradient = nullptr;
-		Curve *p_curve = nullptr;
-
-		if (gradient.is_valid()) {
-			p_gradient = gradient.ptr();
-		}
-
-		if (curve.is_valid()) {
-			p_curve = curve.ptr();
-		}
-
 		int vi = 0, ci = 0, ni = 0, uvi = 0, ti = 0;
 
 		// These are for visibility AABB:
@@ -186,8 +175,8 @@ void TrailMesh::_process(double delta) {
 			Vector3 tangent = trail_points[i].direction_vector;
 			double sz = trail_points[i].size;
 
-			if (p_curve) {
-				sz *= p_curve->sample_baked((double(i + update_fraction) / double(num_points)));
+			if (curve.is_valid()) {
+				sz *= curve->sample_baked((double(i + update_fraction) / double(num_points)));
 			}
 
 			Vector3 edge_vector = orientation * sz;
@@ -222,8 +211,8 @@ void TrailMesh::_process(double delta) {
 			uv_buffer[uvi++] = Vector2(x, 0);
 			uv_buffer[uvi++] = Vector2(x, 1);
 
-			if (p_gradient) {
-				Color color = p_gradient->sample((double(i + update_fraction) / double(num_points)));
+			if (gradient.is_valid()) {
+				Color color = gradient->sample((double(i + update_fraction) / double(num_points)));
 				color_buffer[ci++] = color;
 				color_buffer[ci++] = color;
 			}
@@ -233,21 +222,19 @@ void TrailMesh::_process(double delta) {
 
 		Ref<ArrayMesh> mesh = get_mesh();
 		if (mesh.is_valid()) {
-			ArrayMesh *array_mesh = mesh.ptr();
-			array_mesh->clear_surfaces();
+			mesh->clear_surfaces();
 			geometry[ArrayMesh::ARRAY_VERTEX] = vertex_buffer;
 			geometry[ArrayMesh::ARRAY_NORMAL] = normal_buffer;
 			geometry[ArrayMesh::ARRAY_TANGENT] = tangent_buffer;
 			geometry[ArrayMesh::ARRAY_TEX_UV] = uv_buffer;
-			if (p_gradient) {
+			if (gradient.is_valid()) {
 				geometry[ArrayMesh::ARRAY_COLOR] = color_buffer;
 			}
-			array_mesh->add_surface_from_arrays(Mesh::PrimitiveType::PRIMITIVE_TRIANGLE_STRIP, geometry);
+			mesh->add_surface_from_arrays(Mesh::PrimitiveType::PRIMITIVE_TRIANGLE_STRIP, geometry);
 		}
 
-		Ref<ShaderMaterial> mat = get_material_override();
-		if (mat.is_valid()) {
-			ShaderMaterial *material = mat.ptr();
+		Ref<ShaderMaterial> material = get_material_override();
+		if (material.is_valid()) {
 			material->set_shader_parameter("MAX_VERTICES", float(num_vertices));
 			material->set_shader_parameter("SPAWN_INTERVAL_SECONDS", float(update_interval));
 		}
