@@ -1,3 +1,6 @@
+# NOTE! I've forked this to a version which has a much better name (same license, etc.): ![godot_vaportrail](https://github.com/tcmug/godot_vaportrail)
+# Expect no further development or releases in or from this REPO.
+
 ![trailmesh-logo](https://github.com/tcmug/godot_trailmesh/assets/567207/e4db668e-1a7f-43e4-8489-b978dfe04f4c)
 
 TrailMesh allows you to add 3D trails via an emitter (TrailEmitter), have the shape defined by a curve and colored with a gradient.
