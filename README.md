@@ -1,5 +1,5 @@
-# NOTE! I've forked this to a version which has a much better name (same license, etc.): ![godot_vaportrail](https://github.com/tcmug/godot_vaportrail)
-# Expect no further development or releases in or from this REPO.
+# NOTE! I've forked this to a version which has a much better name (same license, etc.): [godot_vaportrail](https://github.com/tcmug/godot_vaportrail)
+# Expect no further development or releases in or from this repository.
 
 ![trailmesh-logo](https://github.com/tcmug/godot_trailmesh/assets/567207/e4db668e-1a7f-43e4-8489-b978dfe04f4c)
 
